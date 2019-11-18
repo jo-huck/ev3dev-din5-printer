@@ -16,7 +16,7 @@ penMove = LargeMotor(OUTPUT_A)
 penLift = MediumMotor(OUTPUT_C)
 btn = Button()
 
-
+print("started")
 def screenClear():
     for i in range(10):
         print()
