@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/home/robot/EV3devTelegraphyPrinter/print_text.py", line 16, in <module>
-    feedIn()
-NameError: name 'feedIn' is not defined
