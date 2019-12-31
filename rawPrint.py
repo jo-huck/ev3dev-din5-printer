@@ -7,7 +7,7 @@ from ev3dev2.button import Button
 from time import sleep
 
 defaultSpeed = 20
-slowSpeed = 10
+slowSpeed = 15
 penStateDown = False
 penPositionX = 500
 
@@ -21,11 +21,18 @@ cl.mode='COL-COLOR'
 
 colors=('unknown','black','blue','green','yellow','red','white','brown')
 
-def toPositive(value):
-    if (value<0):
-        return value*(-1)
+def toPositive(x,y=0):
+    if x<0:
+        print("inverted value: ", x*(-1))
+        return x*(-1)
     else:
-        return value
+        print("unchanged value: ", x)
+        return x
+def both_negative(x,y):
+    if x<0: #and y<0:
+        return x*-1
+    else:
+        return x
 
 def penMoveSpeed(x,y,penDown,speed):
     global penPositionX
@@ -43,17 +50,17 @@ def penMoveSpeed(x,y,penDown,speed):
 
     if x != 0:
     
-        if (y>x and x != 0 and y/x != 0):
+        if (both_negative(y,x)>both_negative(x,y) and x != 0 and y/x != 0):
             # xSpeed = (defaultSpeed / (y/x)) * 2
-            xSpeed = speed * (toPositive(x)/toPositive(y))
+            xSpeed = speed * (toPositive(x,y)/toPositive(y,x))
             print("--> Calculated xSpeed: ", xSpeed)
         print("pen moves ", x)
         penRL.on_for_degrees(speed=xSpeed,degrees=x,block=(y == 0),brake=True)
         penPositionX += x
         print("pen position is now: ", penPositionX)
     if y != 0:
-        if (x>y and y != 0 and x/y != 0):
-            ySpeed = speed * (toPositive(y)/toPositive(x))
+        if (both_negative(x,y)>both_negative(y,x) and y != 0 and x/y != 0):
+            ySpeed = speed * (toPositive(y,x)/toPositive(x,y))
             print("--> Calculated ySpeed: %s", ySpeed)
         print("pen moves ", -(y))
         feeder.on_for_degrees(speed=ySpeed, degrees=y,brake=True)
